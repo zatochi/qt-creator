@@ -257,7 +257,7 @@ void InstantBlame::setup()
                                                disconnect(m_blameCursorPosConn);
                                                return;
                                            }
-                                           m_cursorPositionChangedTimer->start(500);
+                                           m_cursorPositionChangedTimer->start(1);
                                        });
         m_document = widget->textDocument();
         m_documentChangedConn = connect(m_document, &IDocument::changed,
@@ -373,6 +373,8 @@ void InstantBlame::force()
 
 void InstantBlame::perform()
 {
+    qCritical() << __func__ << "===> PNN";
+
     const TextEditorWidget *widget = TextEditorWidget::currentTextEditorWidget();
     if (!widget) {
         qCWarning(log) << "Cannot get current text editor widget";

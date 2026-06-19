@@ -920,11 +920,11 @@ void ClientPrivate::requestDocumentHighlights(TextEditor::TextEditorWidget *widg
                 requestDocumentHighlightsNow(widget);
                 m_documentHighlightsTimer.take(widget)->deleteLater();
             } else {
-                m_documentHighlightsTimer[widget]->start(250);
+                m_documentHighlightsTimer[widget]->start(1); //pnn
             }
         });
     }
-    timer->start(250);
+    timer->start(1); //pnn
 }
 
 void ClientPrivate::requestDocumentHighlightsNow(TextEditor::TextEditorWidget *widget)
@@ -1367,9 +1367,12 @@ void Client::setAutoRequestCodeActions(bool enabled)
 
 TextEditor::HighlightingResult createHighlightingResult(const SymbolInformation &info)
 {
+    qCritical() << __func__ << "==> pnn";
+
     if (!info.isValid())
         return {};
     const Position &start = info.location().range().start();
+
     return TextEditor::HighlightingResult(start.line() + 1,
                                           start.character() + 1,
                                           info.name().size(),
@@ -1378,6 +1381,8 @@ TextEditor::HighlightingResult createHighlightingResult(const SymbolInformation 
 
 void Client::cursorPositionChanged(TextEditor::TextEditorWidget *widget)
 {
+    qCritical() << __func__ << "==> pnn";
+
     if (d->m_runningFindLinkRequest.isValid())
         cancelRequest(d->m_runningFindLinkRequest);
     TextEditor::TextDocument *document = widget->textDocument();
@@ -1393,7 +1398,11 @@ void Client::cursorPositionChanged(TextEditor::TextEditorWidget *widget)
                 return cursor.selectionStart() <= pos && cursor.selectionEnd() >= pos;
             };
         if (!Utils::anyOf(semanticSelections, selectionContainsPos))
+        {
+            qCritical() << __func__ << "==> pnn" << "if (!Utils::anyOf(semanticSelections, selectionContainsPos))";
+
             widget->setExtraSelections(selectionsId, {});
+        }
     }
 }
 
